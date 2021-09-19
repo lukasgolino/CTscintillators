@@ -34,3 +34,12 @@
 # cmake3 folders
 build
 bin
+
+# data output folders
+
+MCFiles
+data
+
+# data output types
+*.root
+*.dat
