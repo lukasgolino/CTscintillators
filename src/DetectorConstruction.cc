@@ -125,11 +125,22 @@ DetectorConstruction::DetectorConstruction():
   
   OVCVtOffset=-5.*cm;
   OVCHzOffset=0.*cm;
-  
+
+
+//------- 2016 Size ---------
+//  fSciX=1.*cm;
+//  fSciY=60.*cm;
+//  fSciZ=40.*cm;
+//  NofSci=4;
+//---------------------------
+ 
+//------- 2016 Size ---------
   fSciX=1.*cm;
-  fSciY=60.*cm;
+  fSciY=40.*cm;
   fSciZ=40.*cm;
-  //  NofSci=4;
+//  NofSci=4
+//---------------------------
+ 
   
   for(G4int i=0;i<NofSci;++i) physiSci[i]=0;
   
@@ -145,14 +156,26 @@ DetectorConstruction::DetectorConstruction():
   // //-------------------------
 
   //----- 2016 position -----
-  leftPadPosX=   55.0*cm;
-  leftPadPosY=    2.0;
-  leftPadPosZ=  -(0.5*MagnetOutL+MagnetCover)-32.*cm;
-  rightPadPosX= -59.0*cm;
-  rightPadPosY=   3.0*cm;
-  rightPadPosZ= -(0.5*MagnetOutL+MagnetCover)-30.*cm;
-
+  //leftPadPosX=   55.0*cm;
+  //leftPadPosY=    2.0;
+  //leftPadPosZ=  -(0.5*MagnetOutL+MagnetCover)-32.*cm;
+  //leftPadPosZ=  0*cm;
+  //rightPadPosX= -59.0*cm;
+  //rightPadPosY=   3.0*cm;
+  //rightPadPosZ= -(0.5*MagnetOutL+MagnetCover)-30.*cm;
+  //rightPadPosZ= 0;
   //-------------------------
+
+  //----- 2021 position -----
+    leftPadPosX=   34.5*cm;
+    leftPadPosY=    0.0;
+    //leftPadPosZ=  -(0.5*MagnetOutL+MagnetCover)-32.*cm;
+    leftPadPosZ=  0*cm;
+    rightPadPosX= -39.5*cm;
+    rightPadPosY=   0.0*cm;
+    //rightPadPosZ= -(0.5*MagnetOutL+MagnetCover)-30.*cm;
+    rightPadPosZ=   2.2*cm;
+//-------------------------
 
   fpMagField = new MagneticField(G4ThreeVector(0.,0.,3.*tesla));
 

@@ -1,4 +1,4 @@
-#define N 13
+#define N 1
 
 double DegPosZ = -32.5;//cm
 

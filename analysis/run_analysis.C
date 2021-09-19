@@ -343,21 +343,35 @@ PMT 6 eff = 0.580589 +/- 0.0365397
 		0.58273
 PMT 5 eff = 0.5987 +/- 0.034713
 		0.602585
+PMT 17 eff = 0.83 //Daniel and Gareth 
+PMT 18 eff = 0.95
 */
 
 double pmt5eff = 0.6;
 double pmt6eff = 0.58;
 double pmt7eff = 0.45;
 double pmt8eff = 1.14;
+double pmt17eff = 0.83; //SiPM 1 AND efficiency
+double pmt18eff = 0.95; //SiPM 2 AND efficiency.
 
 void analysis_witheff(Int_t f=0)
 {	
   Float_t NofEvents = 100000.;
-  //  Float_t threshold1 = 3.; // deposit energy MeV
-  Float_t threshold1 = 0.; // deposit energy MeV
+  Float_t threshold1 = 3.; // deposit energy MeV
+  //Float_t threshold1 = 0.; // deposit energy MeV
   
-  float lefteff = float(pmt5eff*pmt6eff);
-  float righteff = float(pmt7eff*pmt8eff);
+  //Efficiencies of PMT's
+  //float lefteff = float(pmt5eff*pmt6eff); //=0.6*0.58 == 0.348
+  //float righteff = float(pmt7eff*pmt8eff); //=0.45*1.14 == 0.513
+  //lefteff =  lefteff*0.9; //Let's assume these have both lost 10% efficiency since they are old.
+  //righteff = righteff*0.9; 
+
+  //Efficiencis of SiPM
+  float lefteff = float(pmt17eff + 0.02); //0.83
+  float righteff = float(pmt18eff + 0.02); //0.95
+
+  //lefteff = 0.9;
+  //righteff = 0.85;
 
   TString fin="../MCfiles/hit";
   if(f<10) fin+="0";
@@ -405,32 +419,28 @@ void analysis_witheff(Int_t f=0)
   hKinTHRS1->GetYaxis()->SetTitle("dN/dK [MeV^{-1}]");
 
   for(Int_t i=0; i<e; i++)
+  {
+    data->GetEntry(i);
+    if(abs(pdgC) != PIP && abs(pdgC) != EM && abs(pdgC) != MUM) continue; 
+    ++n;
+
+    if( (padN==0. && lefteff > gRandom->Uniform()) || (padN==1. && righteff > gRandom->Uniform()) )
     {
-      data->GetEntry(i);
-      if(abs(pdgC) != PIP && abs(pdgC) != EM && abs(pdgC) != MUM) continue; 
-      ++n;
-
-      if( padN==0. && lefteff > gRandom->Uniform() )
-	continue;
-      
-      if( padN==1. && righteff > gRandom->Uniform() )
-	continue;	  
-
       if(E>=threshold1)
-	{ 
-	  ++t1;
-	  if(padN==0.) ++p0_1; // left
-	  else if(padN==1.) ++p1_1; // right
-	  hKinTHRS1->Fill(kin);
-	  hTimeTHRS1->Fill(t);
+      { 
+        ++t1;
+        if(padN==0.) ++p0_1; // left
+        else if(padN==1.) ++p1_1; // right
+        hKinTHRS1->Fill(kin);
+        hTimeTHRS1->Fill(t);
 
-	  hEdep->Fill(E);
-	  if(abs(pdgC) == EM) hEdepEl->Fill(E);
-	  if(abs(pdgC) == MUM)hEdepMu->Fill(E);
-	  if(abs(pdgC) == PIP) hEdepPi->Fill(E);
-	}
-	       		
+        hEdep->Fill(E);
+        if(abs(pdgC) == EM) hEdepEl->Fill(E);
+        if(abs(pdgC) == MUM)hEdepMu->Fill(E);
+        if(abs(pdgC) == PIP) hEdepPi->Fill(E);
+      }
     }
+  }
 	
   TString fout="../data/anahisto";
   if(f<10) fout+="0";
@@ -479,7 +489,7 @@ void analysis_witheff(Int_t f=0)
 }
 
 
-void run_analysis(Int_t Nfile=13)
+void run_analysis(Int_t Nfile=1)
 {
   for(Int_t i=0; i<Nfile; ++i)
     {

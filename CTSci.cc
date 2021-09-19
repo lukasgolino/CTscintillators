@@ -43,13 +43,11 @@
 
 #include "G4SystemOfUnits.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
 
-#ifdef G4UI_USE
+#include "G4VisExecutive.hh"
+
+
 #include "G4UIExecutive.hh"
-#endif
 
 #include "Randomize.hh"
 #include <time.h>
@@ -95,17 +93,16 @@ int main(int argc,char** argv)
   // Initialize G4 kernel
   //
   runManager->Initialize();
-      
-#ifdef G4VIS_USE
+
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif    
+    
      
   // Get the pointer to the User Interface manager
   //
   G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
-  if (argc!=1)   // batch mode  
+  if (/*argc!=1*/ 0)   // batch mode  
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
@@ -113,18 +110,13 @@ int main(int argc,char** argv)
     }
   else           // interactive mode : define UI session
     { 
-#ifdef G4UI_USE
+
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
+      UImanager->ApplyCommand("/control/execute ./vis.mac");     
       ui->SessionStart();
+      std::cout << "/n/n/n We do get here /n/n/n";
       delete ui;
-#endif
-     
-#ifdef G4VIS_USE
-      delete visManager;
-#endif     
+      delete visManager;    
     }
 
   // Free the store: user actions, physics_list and detector_description are
