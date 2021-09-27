@@ -361,14 +361,14 @@ void analysis_witheff(Int_t f=0)
   //Float_t threshold1 = 0.; // deposit energy MeV
   
   //Efficiencies of PMT's
-  //float lefteff = float(pmt5eff*pmt6eff); //=0.6*0.58 == 0.348
-  //float righteff = float(pmt7eff*pmt8eff); //=0.45*1.14 == 0.513
+  float lefteff = float(pmt5eff*pmt6eff); //=0.6*0.58 == 0.348
+  float righteff = float(pmt7eff*pmt8eff); //=0.45*1.14 == 0.513
   //lefteff =  lefteff*0.9; //Let's assume these have both lost 10% efficiency since they are old.
   //righteff = righteff*0.9; 
 
   //Efficiencis of SiPM
-  float lefteff = float(pmt17eff + 0.02); //0.83
-  float righteff = float(pmt18eff + 0.02); //0.95
+  //float lefteff = float(pmt17eff + 0.02); //0.83
+  //float righteff = float(pmt18eff + 0.02); //0.95
 
   //lefteff = 0.9;
   //righteff = 0.85;

@@ -134,9 +134,18 @@ DetectorConstruction::DetectorConstruction():
 //  NofSci=4;
 //---------------------------
  
-//------- 2016 Size ---------
+//------- 2021 Size ---------
+//  SiPM Size
+//  fSciX=1.*cm;
+//  fSciY=40.*cm;
+//  fSciZ=40.*cm;
+//  NofSci=4
+//---------------------------
+
+//------- 2021 Size ---------
+//  PMT Size
   fSciX=1.*cm;
-  fSciY=40.*cm;
+  fSciY=60.*cm;
   fSciZ=40.*cm;
 //  NofSci=4
 //---------------------------
@@ -167,14 +176,28 @@ DetectorConstruction::DetectorConstruction():
   //-------------------------
 
   //----- 2021 position -----
-    leftPadPosX=   34.5*cm;
+  //  SiPM Pos
+  //  leftPadPosX=   34.5*cm;
+  //  leftPadPosY=    0.0;
+  //  leftPadPosZ=  -(0.5*MagnetOutL+MagnetCover)-32.*cm;
+  //  leftPadPosZ=  0*cm;
+  //  rightPadPosX= -39.5*cm;
+  //  rightPadPosY=   0.0*cm;
+  //  rightPadPosZ= -(0.5*MagnetOutL+MagnetCover)-30.*cm;
+  //  rightPadPosZ=   2.2*cm;
+//-------------------------
+
+  //----- 2021 position -----
+  //  PMT Pos
+    leftPadPosX=   65*cm;
     leftPadPosY=    0.0;
-    //leftPadPosZ=  -(0.5*MagnetOutL+MagnetCover)-32.*cm;
+  //  leftPadPosZ=  -(0.5*MagnetOutL+MagnetCover)-32.*cm;
     leftPadPosZ=  0*cm;
-    rightPadPosX= -39.5*cm;
+    
+    rightPadPosX= -55*cm;
     rightPadPosY=   0.0*cm;
-    //rightPadPosZ= -(0.5*MagnetOutL+MagnetCover)-30.*cm;
-    rightPadPosZ=   2.2*cm;
+  //  rightPadPosZ= -(0.5*MagnetOutL+MagnetCover)-30.*cm;
+    rightPadPosZ=   0*cm;
 //-------------------------
 
   fpMagField = new MagneticField(G4ThreeVector(0.,0.,3.*tesla));

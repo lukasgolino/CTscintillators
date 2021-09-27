@@ -102,7 +102,7 @@ int main(int argc,char** argv)
   //
   G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
-  if (/*argc!=1*/ 0)   // batch mode  
+  if (/*argc!=1*/ 1)   // batch mode  //Sketchy but change this to a 1 for run and to a 0 for vis.
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
