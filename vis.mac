@@ -5,8 +5,8 @@
 # Sets some default verbose
 #
 /control/verbose 2
+/control/saveHistory
 /run/verbose 2
-/tracking/verbose 1
 #
 
 # viewing in a VRML viewer:

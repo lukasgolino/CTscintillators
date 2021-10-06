@@ -489,13 +489,13 @@ void analysis_witheff(Int_t f=0)
 }
 
 
-void run_analysis(Int_t Nfile=1)
+void run_analysis(Int_t Nfile=2)
 {
   for(Int_t i=0; i<Nfile; ++i)
     {
       //      analysis_mutlTHR(i);
-      //  analysis(i);
-      analysis_witheff(i);
+        analysis(i);
+      //analysis_witheff(i);
     }
   gROOT->ProcessLine(".q");
 	

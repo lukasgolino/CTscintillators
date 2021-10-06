@@ -102,7 +102,7 @@ int main(int argc,char** argv)
   //
   G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
-  if (/*argc!=1*/ 1)   // batch mode  //Sketchy but change this to a 1 for run and to a 0 for vis.
+  if (argc!=1)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
@@ -112,17 +112,17 @@ int main(int argc,char** argv)
     { 
 
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-      UImanager->ApplyCommand("/control/execute ./vis.mac");     
+      UImanager->ApplyCommand("/control/execute ../vis.mac");     
       ui->SessionStart();
       std::cout << "/n/n/n We do get here /n/n/n";
-      delete ui;
-      delete visManager;    
+      delete ui;    
     }
 
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
+  delete visManager;    
   delete runManager;
 
   return 0;
