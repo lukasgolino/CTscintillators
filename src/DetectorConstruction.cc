@@ -299,17 +299,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //------------------------------
   G4Tubs* Bore = new G4Tubs("MagnetBore",0.,0.5*MagnetBore,0.5*MagnetOutL,0.*deg,360.*deg);
 
-
-
-  //------------------------------ 
-  // Catching Trap -- Wont need any of this.
-  //------------------------------			 
-  solidCT = new G4Tubs("solidCT",0.,0.5*MagnetOutOD,0.5*OVCL,0.*deg,360.*deg);
-  logicCT =  new G4LogicalVolume(solidCT,Air,"logicCT");
-  logicCT->SetFieldManager(fpMagField->GetLocalFieldManager(),true); // "local" magnetic field
-  physiCT = new G4PVPlacement(0,G4ThreeVector(),
-			      logicCT,"CatchingTrap",logicWorld,false,0,checkOverlaps);
-
   //------------------------------ 
   // Magnet Outer
   //------------------------------
