@@ -302,7 +302,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   //------------------------------ 
-  // Catching Trap
+  // Catching Trap -- Wont need any of this.
   //------------------------------			 
   solidCT = new G4Tubs("solidCT",0.,0.5*MagnetOutOD,0.5*OVCL,0.*deg,360.*deg);
   logicCT =  new G4LogicalVolume(solidCT,Air,"logicCT");
