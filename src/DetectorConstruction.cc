@@ -328,16 +328,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   physiMagnetIn = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),
 				    logicMagnetIn,"MagnetIn",logicCT,false,0,checkOverlaps);
 
-  //------------------------------ 
-  // Magnet Windings
-  //------------------------------
-  solidMagnetWinding = new G4Tubs("solidMagnetWinding",0.5*MagnetWindID,0.5*MagnetWindOD,
-				  0.5*WallL,0.*deg,360.*deg);
-  logicMagnetWinding = new G4LogicalVolume(solidMagnetWinding,CopperW,"logicMagnetWinding");
-  physiMagnetWinding = new G4PVPlacement(0,G4ThreeVector(0.,OVCVtOffset,0.),
-					 logicMagnetWinding,"MagnetWinding",
-  					 logicMagnetIn,false,0,checkOverlaps);
-
 
   //------------------------------ 
   // Magnet Side Covers
