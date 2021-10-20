@@ -57,7 +57,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int rid=aRun->GetRunID();
   G4cout << "### Run " << rid << " start." << G4endl;
-  TString filename="../MCfiles/hit";
+  TString filename="MCfiles/hit";
   if(rid<10) filename+="0";
   filename+=rid;
   //  filename+="_default";

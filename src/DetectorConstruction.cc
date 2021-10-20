@@ -62,6 +62,9 @@
 
 #include "globals.hh"
 
+#include "G4GDMLParser.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 DetectorConstruction::DetectorConstruction():
@@ -80,6 +83,7 @@ DetectorConstruction::DetectorConstruction():
   solidDeg1(0),          logicDeg1(0),          physiDeg1(0),
   solidDeg2(0),          logicDeg2(0),          physiDeg2(0),
   solidSci(0),           logicSci(0),
+                         logicInterconnect(0),  physiInterconnect(0),
   NofSci(2)
   //,stepLimit(0)
 {
@@ -149,6 +153,14 @@ DetectorConstruction::DetectorConstruction():
   fSciZ=40.*cm;
 //  NofSci=4
 //---------------------------
+
+//------- 2021 Size ---------
+//  PMT Size
+  fSciX=1.7*mm;
+  fSciY=200.*mm;
+  fSciZ=72.*mm;
+//  NofSci=4
+//---------------------------
  
   
   for(G4int i=0;i<NofSci;++i) physiSci[i]=0;
@@ -199,6 +211,8 @@ DetectorConstruction::DetectorConstruction():
   //  rightPadPosZ= -(0.5*MagnetOutL+MagnetCover)-30.*cm;
     rightPadPosZ=   0*cm;
 //-------------------------
+
+
 
   fpMagField = new MagneticField(G4ThreeVector(0.,0.,3.*tesla));
 
@@ -299,65 +313,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //------------------------------
   G4Tubs* Bore = new G4Tubs("MagnetBore",0.,0.5*MagnetBore,0.5*MagnetOutL,0.*deg,360.*deg);
 
-  //------------------------------ 
-  // Magnet Outer
-  //------------------------------
-  solidMagnetOut = new G4Tubs("solidMagnetOut",0.5*MagnetOutID,0.5*MagnetOutOD,
-			      0.5*MagnetOutL,0.*deg,360.*deg);
-  logicMagnetOut = new G4LogicalVolume(solidMagnetOut,Aluminium,"logicMagnetOut");
-  physiMagnetOut = new G4PVPlacement(0,G4ThreeVector(),
-				     logicMagnetOut,"MagnetOut",logicCT,false,0,checkOverlaps);
-
-  //------------------------------ 
-  // Magnet Radiation Shield
-  //------------------------------ 
-  solidMagnetShield = new G4Tubs("solidShield",0.5*MagnetShieldID,0.5*MagnetShieldOD,0.5*MagnetShieldL,0.*deg,360.*deg);
-  logicMagnetShield = new G4LogicalVolume(solidMagnetShield,Aluminium,"logicShield");
-  physiMagnetShield = new G4PVPlacement(0,G4ThreeVector(),
-					logicMagnetShield,"MagnetShield",
-					logicCT,false,0,checkOverlaps);   
-
-  //------------------------------ 
-  // Magnet Inner
-  //------------------------------
-  G4Tubs* Inner = new G4Tubs("Inner",0.,0.5*MagnetInOD,0.5*MagnetInL,0.*deg,360.*deg);
-  solidMagnetIn = new G4SubtractionSolid("solidMagnetIn", Inner, Bore, 0, 
-					 G4ThreeVector(0.,OVCVtOffset,0.));
-  logicMagnetIn = new G4LogicalVolume(solidMagnetIn,coolant,"logicMagnetIn");
-  //  logicMagnetIn = new G4LogicalVolume(solidMagnetIn,Vacuum,"logicMagnetIn");
-  physiMagnetIn = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),
-				    logicMagnetIn,"MagnetIn",logicCT,false,0,checkOverlaps);
 
 
-  //------------------------------ 
-  // Magnet Side Covers
-  //------------------------------
-  G4Tubs* Cover = new G4Tubs("Cover",0.,0.49*MagnetOutOD,0.5*MagnetCover,0.*deg,360.*deg);
-  solidMagnetCover = new G4SubtractionSolid("solidMagnetCover", Cover, Bore, 0, 
-					    G4ThreeVector(0.,OVCVtOffset,0.));
-  logicMagnetCover = new G4LogicalVolume(solidMagnetCover,Aluminium,"logicMagnetCovers");
-  physiMagnetCover[0] = new G4PVPlacement(0,G4ThreeVector(0.,0.,-0.5*MagnetOutL+0.5*MagnetCover),
-					  logicMagnetCover,"MagnetCover01",
-  					  logicCT,false,0,checkOverlaps);
-  physiMagnetCover[1] = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.5*MagnetOutL-0.5*MagnetCover),
-					  logicMagnetCover,"MagnetCover02",
-  					  logicCT,false,1,checkOverlaps);
 
 
-  //------------------------------ 
-  // Inner Volume
-  //------------------------------
-  solidInner = new G4Tubs("solidInner",0.,0.5*OVCOD,0.5*OVCL,0.*deg,360.*deg);
-  logicInner = new G4LogicalVolume(solidInner,Vacuum,"logicInner");
-  physiInner = new G4PVPlacement(0,                                         // no rotation
-				 G4ThreeVector(0.,OVCVtOffset,OVCHzOffset), // at (x,y,z)
-				 logicInner,                                // its logical volume				  
-				 "VacuumChamber",                           // its name
-				 logicCT,                                // its mother  volume
-				 false,                                     // no boolean operations
-				 0,                                         // copy number
-				 checkOverlaps);  
-  
+
+
+
+
+
 
   //------------------------------ 
   // OVC
@@ -463,43 +427,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	<<physiSci[1]->GetTranslation().z()/cm<<") cm"<<G4endl;
 
 
+  //Cross Section
+  G4GDMLParser parser;
+  parser.Read("/home/alpha/CTScintLukas/build/SimpleCrossOnlyHighRes.gdml");
+  logicInterconnect = parser.GetVolume("SimpleCrossHighRes_Q235");
+  physiInterconnect = new G4PVPlacement(0,G4ThreeVector(),logicInterconnect,"Interconect",logicWorld,false,0,checkOverlaps);
+
+
 
   //--------- Visualization attributes -------------------------------
 
   G4VisAttributes* WorldVisAtt= new G4VisAttributes(false);
   logicWorld->SetVisAttributes(WorldVisAtt);
-
-  G4VisAttributes* CTVisAtt= new G4VisAttributes(false);
-  logicCT->SetVisAttributes(CTVisAtt);
-
-  // //  G4VisAttributes* SwanVisAtt= new G4VisAttributes(false);
-  // G4VisAttributes* SwanVisAtt= new G4VisAttributes(G4Colour::Green());
-  // logicSwansea->SetVisAttributes(SwanVisAtt);
-
-  //  G4VisAttributes* MagOutVisAtt= new G4VisAttributes(G4Colour(0.0,0.8,0.2)); // greenish?
-  //  G4VisAttributes* MagOutVisAtt= new G4VisAttributes(false);
-  G4VisAttributes* MagOutVisAtt=new G4VisAttributes(G4Colour::Green());
-  logicMagnetOut->SetVisAttributes(MagOutVisAtt);
-  
-  G4VisAttributes* MagShlVisAtt= new G4VisAttributes(G4Colour(0.7, 0.4, 0.1)); // brown
-  logicMagnetShield->SetVisAttributes(MagShlVisAtt);
-  
-  G4VisAttributes* MagInVisAtt= new G4VisAttributes(G4Colour::Cyan()); 
-  logicMagnetIn ->SetVisAttributes(MagInVisAtt);
-  
-  G4VisAttributes* MagWindVisAtt= new G4VisAttributes(G4Colour::Yellow()); 
-  logicMagnetWinding->SetVisAttributes(MagWindVisAtt);
-  
-  // G4VisAttributes* MagCovVisAtt= new G4VisAttributes(false); 
-  G4VisAttributes* MagCovVisAtt= new G4VisAttributes(G4Colour::Grey());
-  logicMagnetCover->SetVisAttributes(MagCovVisAtt);
   
   G4VisAttributes* TrpVisAtt= new G4VisAttributes(G4Colour::Yellow()); 
   logicTrap->SetVisAttributes(TrpVisAtt);
   
-  //  G4VisAttributes* InnVisAtt= new G4VisAttributes(G4Colour::Cyan()); 
-   G4VisAttributes* InnVisAtt= new G4VisAttributes(false); 
-  logicInner->SetVisAttributes(InnVisAtt);
   
   G4VisAttributes* SciVisAtt= new G4VisAttributes(G4Colour::White()); 
   logicSci->SetVisAttributes(SciVisAtt);

@@ -112,7 +112,9 @@ int main(int argc,char** argv)
     { 
 
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-      UImanager->ApplyCommand("/control/execute ../vis.mac");     
+
+      //UImanager->ApplyCommand("/control/execute ../vis.mac");     
+      UImanager->ApplyCommand("/control/execute ./vis.mac");     
       ui->SessionStart();
       std::cout << "/n/n/n We do get here /n/n/n";
       delete ui;    

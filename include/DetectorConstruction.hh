@@ -137,6 +137,10 @@ private:
   G4LogicalVolume*   logicSci;
   G4VPhysicalVolume* physiSci[2];         
 
+  G4LogicalVolume*   logicInterconnect;
+  G4VPhysicalVolume* physiInterconnect;         
+
+
   MagneticField* fpMagField;
      
   DetectorMessenger* detectorMessenger;
