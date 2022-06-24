@@ -7,3 +7,6 @@
 #
 /tracking/verbose 0
 /run/beamOn 100
+/vis/scene/add/trajectories
+/tracking/storeTrajectory 1
+/run/beamOn 10000

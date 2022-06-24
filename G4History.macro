@@ -10,6 +10,9 @@
 /vis/scene/add/volume world -1 -1 none m 0 0 0 0 0 0
 /vis/sceneHandler/attach
 /vis/viewer/set/viewpointThetaPhi 160. 160.
+/vis/viewer/set/viewpointThetaPhi 120 40
+/vis/scene/add/axes 0 0 0 0.2 m
+/vis/scene/notifyHandlers
 /vis/viewer/set/style surface
 /vis/scene/add/trajectories smooth
 /tracking/storeTrajectory 2

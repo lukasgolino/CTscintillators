@@ -38,8 +38,8 @@
 #include "TNtuple.h"
 #include "TString.h"
 
-TFile* rootfile;
-TNtuple *nt;
+//TFile* rootfile;
+//TNtuple *nt;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,19 +55,24 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
+  //TFile* rootfile;
+  //TNtuple *nt;
+  //TFile* rootfile;
   G4int rid=aRun->GetRunID();
   G4cout << "### Run " << rid << " start." << G4endl;
-  TString filename="MCfiles/hit";
+  //std::string filename = "MCfiles/hit";
+  std::string filename = "hit";
   if(rid<10) filename+="0";
-  filename+=rid;
+  filename+=std::to_string(rid);
   //  filename+="_default";
   filename+=".root";
   //rootfile.Open(filename,"RECREATE");
-  rootfile=new TFile(filename,"RECREATE");
-  
+  std::cout << "rootfile loc = " << filename << std::endl;
+  //TFile* rootfile2=new TFile("test", "RECREATE");
+  //rootfile = rootfile2;
   //PID=0 means primary particle
   //PAD=0 means left pad, PAD=1 mean right pad
-  nt=new TNtuple("nt","nt","EVTN:PDG:PID:TID:EDEP:XPOS:YPOS:ZPOS:PAD:KE:GT");
+  //nt=new TNtuple("nt","nt","EVTN:PDG:PID:TID:EDEP:XPOS:YPOS:ZPOS:PAD:KE:GT");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,10 +80,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 void RunAction::EndOfRunAction(const G4Run*)
 {
   //nt->Write();
-  rootfile->Write();
-  rootfile->Close();
+  //rootfile->Write();
+  //rootfile->Close();
   //delete nt;
-  delete rootfile;
+  //delete rootfile;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

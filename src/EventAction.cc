@@ -41,9 +41,11 @@
 #include "G4VHitsCollection.hh"
 #include "G4SDManager.hh"
 
+#include "RunAction.hh"
+
 #include "TNtuple.h"
 
-extern TNtuple *nt;
+//extern TNtuple *nt;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -107,7 +109,9 @@ void EventAction::EndOfEventAction(const G4Event* evt)
       t    = (*SHC)[i] -> GetGtime();
 
       // Fill the Ntuple
-      nt -> Fill( event_id, pdg, pID ,tID, dE, P.getX(),P.getY(),P.getZ(),pad,ke,t);
+      TNtuple *nt;
+      //nt -> Fill( event_id, pdg, pID ,tID, dE, P.getX(),P.getY(),P.getZ(),pad,ke,t);
+      //nt->Write();
     }
     
    }

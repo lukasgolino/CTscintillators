@@ -135,7 +135,7 @@ private:
      
   G4Box*             solidSci;
   G4LogicalVolume*   logicSci;
-  G4VPhysicalVolume* physiSci[2];         
+  G4VPhysicalVolume* physiSci[4];         
 
   G4LogicalVolume*   logicInterconnect;
   G4VPhysicalVolume* physiInterconnect;         

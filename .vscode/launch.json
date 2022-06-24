@@ -9,7 +9,7 @@
             "name": "No Args (Vis)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/alpha/CTScintLukas/build/CTSci.exe",
+            "program": "${workspaceFolder}/build/CTSci.exe",
             "stopAtEntry": true,
             "cwd": "${fileDirname}",
             "environment": [],
@@ -29,8 +29,29 @@
             "name": "Run",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/alpha/CTScintLukas/build/CTSci.exe",
-            "args": ["/home/alpha/CTScintLukas/run.mac"],
+            "program": "${workspaceFolder}/build/CTSci.exe",
+            "args": ["/${workspaceFolder}/run.mac"],
+            "stopAtEntry": true,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": 
+            [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+        {
+            "name": "Vis & Run (combined macro)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/CTSci.exe",
+            "args": ["/${workspaceFolder}/visthenrun.mac"],
             "stopAtEntry": true,
             "cwd": "${fileDirname}",
             "environment": [],

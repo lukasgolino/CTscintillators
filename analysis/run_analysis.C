@@ -494,7 +494,7 @@ void run_analysis(Int_t Nfile=2)
   for(Int_t i=0; i<Nfile; ++i)
     {
       //      analysis_mutlTHR(i);
-        analysis(i);
+        analysis(i+1);
       //analysis_witheff(i);
     }
   gROOT->ProcessLine(".q");

@@ -143,15 +143,15 @@ DetectorConstruction::DetectorConstruction():
 //  fSciX=1.*cm;
 //  fSciY=40.*cm;
 //  fSciZ=40.*cm;
-//  NofSci=4
+//  NofSci=4;
 //---------------------------
 
 //------- 2021 Size ---------
 //  PMT Size
-  fSciX=1.*cm;
-  fSciY=60.*cm;
-  fSciZ=40.*cm;
-//  NofSci=4
+//  fSciX=1.*cm;
+//  fSciY=60.*cm;
+//  fSciZ=40.*cm;
+//  NofSci=4;
 //---------------------------
 
 //------- 2021 Size ---------
@@ -159,7 +159,7 @@ DetectorConstruction::DetectorConstruction():
   fSciX=1.7*mm;
   fSciY=200.*mm;
   fSciZ=72.*mm;
-//  NofSci=4
+  NofSci=4;
 //---------------------------
  
   
@@ -201,12 +201,25 @@ DetectorConstruction::DetectorConstruction():
 
   //----- 2021 position -----
   //  PMT Pos
-    leftPadPosX=   65*cm;
-    leftPadPosY=    0.0;
+  //  leftPadPosX=   65*cm;
+  //  leftPadPosY=    0.0;
   //  leftPadPosZ=  -(0.5*MagnetOutL+MagnetCover)-32.*cm;
-    leftPadPosZ=  0*cm;
+  //  leftPadPosZ=  0*cm;
     
-    rightPadPosX= -55*cm;
+  //  rightPadPosX= -55*cm;
+  //  rightPadPosY=   0.0*cm;
+  //  rightPadPosZ= -(0.5*MagnetOutL+MagnetCover)-30.*cm;
+  //  rightPadPosZ=   0*cm;
+//-------------------------
+
+  //----- 2021 position -----
+  //  PMT Pos
+    leftPadPosX=   98.32365*mm;
+    leftPadPosY=  0*cm;
+  //  leftPadPosZ=  -(0.5*MagnetOutL+MagnetCover)-32.*cm;
+    leftPadPosZ=    82.4256*mm;
+    
+    rightPadPosX= -30*cm;
     rightPadPosY=   0.0*cm;
   //  rightPadPosZ= -(0.5*MagnetOutL+MagnetCover)-30.*cm;
     rightPadPosZ=   0*cm;
@@ -404,6 +417,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   solidSci = new G4Box("solidScintillators",fSciX,0.5*fSciY,0.5*fSciZ);
   logicSci = new G4LogicalVolume(solidSci,SciMater,"logicScintillators");
   logicSci->SetSensitiveDetector( scintillators );
+
+
+  G4RotationMatrix * RotMat = new G4RotationMatrix();
+  RotMat->rotateY(45);
+
+  G4RotationMatrix * RotMat1 = new G4RotationMatrix();
+  RotMat1->rotateY(-45);
+
   //  logicSci = new G4LogicalVolume(solidSci,SciMater,"Sci",0,scintillators);
     
   //   physiSci = new G4PVPlacement(0,G4ThreeVector(20.*cm,0.,0.),logicSci,"Sci",logicWorld,false,0);
@@ -412,24 +433,38 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //   physiSci = new G4PVPlacement(0,G4ThreeVector(-20.*cm-fSciX,0.,0.),logicSci,"Sci",logicWorld,false,3);
    
   // LEFT PAD by looking from AD -- Laser Hut Side
-  physiSci[0] = new G4PVPlacement(0,G4ThreeVector(leftPadPosX,leftPadPosY,leftPadPosZ),logicSci,
+  physiSci[0] = new G4PVPlacement(RotMat,G4ThreeVector(leftPadPosX,leftPadPosY,leftPadPosZ),logicSci,
 				  "ScintillatorsLeft",logicWorld,false,0,checkOverlaps);
   G4cout<<physiSci[0]->GetName()<<" Position (x,y,z): ("
 	<<physiSci[0]->GetTranslation().x()/cm<<", "
 	<<physiSci[0]->GetTranslation().y()/cm<<", "
 	<<physiSci[0]->GetTranslation().z()/cm<<") cm"<<G4endl;
   // RIGHT PAD -- ASACUSA side
-  physiSci[1] = new G4PVPlacement(0,G4ThreeVector(rightPadPosX,rightPadPosY,rightPadPosZ),logicSci,
+  physiSci[1] = new G4PVPlacement(RotMat1,G4ThreeVector(-leftPadPosX,rightPadPosY,leftPadPosZ),logicSci,
 				  "ScintillatorsRight",logicWorld,false,1,checkOverlaps);
   G4cout<<physiSci[1]->GetName()<<" Position (x,y,z): ("
 	<<physiSci[1]->GetTranslation().x()/cm<<", "
 	<<physiSci[1]->GetTranslation().y()/cm<<", "
 	<<physiSci[1]->GetTranslation().z()/cm<<") cm"<<G4endl;
+    // LEFT PAD right by looking from AD -- Laser Hut Side
+  physiSci[2] = new G4PVPlacement(RotMat1,G4ThreeVector(leftPadPosX,leftPadPosY,-leftPadPosZ),logicSci,
+				  "ScintillatorsLeft1",logicWorld,false,0,checkOverlaps);
+  G4cout<<physiSci[2]->GetName()<<" Position (x,y,z): ("
+	<<physiSci[2]->GetTranslation().x()/cm<<", "
+	<<physiSci[2]->GetTranslation().y()/cm<<", "
+	<<physiSci[2]->GetTranslation().z()/cm<<") cm"<<G4endl;
+  // RIGHT PAD left -- ASACUSA side
+  physiSci[3] = new G4PVPlacement(RotMat,G4ThreeVector(-leftPadPosX,rightPadPosY,-leftPadPosZ),logicSci,
+				  "ScintillatorsRight1",logicWorld,false,1,checkOverlaps);
+  G4cout<<physiSci[3]->GetName()<<" Position (x,y,z): ("
+	<<physiSci[3]->GetTranslation().x()/cm<<", "
+	<<physiSci[3]->GetTranslation().y()/cm<<", "
+	<<physiSci[3]->GetTranslation().z()/cm<<") cm"<<G4endl;
 
 
   //Cross Section
   G4GDMLParser parser;
-  parser.Read("/home/alpha/CTScintLukas/build/SimpleCrossOnlyHighRes.gdml");
+  parser.Read("SimpleCrossOnlyHighRes.gdml");
   logicInterconnect = parser.GetVolume("SimpleCrossHighRes_Q235");
   physiInterconnect = new G4PVPlacement(0,G4ThreeVector(),logicInterconnect,"Interconect",logicWorld,false,0,checkOverlaps);
 

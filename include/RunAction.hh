@@ -35,6 +35,13 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include "RunAction.hh"
+
+#include "G4Run.hh"
+
+#include "TFile.h"
+#include "TNtuple.h"
+#include "TString.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -43,6 +50,8 @@ class G4Run;
 class RunAction : public G4UserRunAction
 {
   public:
+    TFile* rootfile;
+    TNtuple *nt;
     RunAction();
    ~RunAction();
 

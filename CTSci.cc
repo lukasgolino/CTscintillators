@@ -52,10 +52,30 @@
 #include "Randomize.hh"
 #include <time.h>
 
+#include <unistd.h>
+#include <stdio.h>
+#include <limits.h>
+#include "TFile.h"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
+  std::cout << "PLEASE WORK" << std::endl;
+  char cwd[PATH_MAX];
+  if (getcwd(cwd, sizeof(cwd)) != NULL)
+  {
+    printf("Current working dir: %s\n", cwd);
+  }
+  chdir("/home/alpha/CTScintLukas/"); //This janky as hell but change this to your directory just to save you the trouble. 
+  char cwdnew[PATH_MAX];
+  if (getcwd(cwdnew, sizeof(cwdnew)) != NULL)
+  {
+    printf("Current working dir: %s\n", cwdnew);
+  }
+
+
 
   //CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanluxEngine);
