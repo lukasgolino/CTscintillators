@@ -483,11 +483,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	<<physiSci[1]->GetTranslation().y()/cm<<", "
 	<<physiSci[1]->GetTranslation().z()/cm<<") cm"<<G4endl;
 
-
-
   //--------- Visualization attributes -------------------------------
 
-  G4VisAttributes* WorldVisAtt= new G4VisAttributes(false);
+  /*G4VisAttributes* WorldVisAtt= new G4VisAttributes(false);
   logicWorld->SetVisAttributes(WorldVisAtt);
 
   G4VisAttributes* CTVisAtt= new G4VisAttributes(false);
@@ -540,7 +538,30 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   G4VisAttributes* Deg2VisAtt = new G4VisAttributes(G4Colour::Blue());
   //  G4VisAttributes* Deg2VisAtt = new G4VisAttributes(false);
-  logicDeg2->SetVisAttributes(Deg2VisAtt);
+  logicDeg2->SetVisAttributes(Deg2VisAtt);*/
+
+
+  //--------- Visualization attributes -------------------------------
+  G4VisAttributes* red= new G4VisAttributes(G4Colour::Red()); //Red
+  G4VisAttributes* green= new G4VisAttributes(G4Colour::Green()); //Red
+
+  G4VisAttributes* WorldVisAtt= new G4VisAttributes(false);  //Transparent
+  logicWorld->SetVisAttributes(WorldVisAtt);
+  logicCT->SetVisAttributes(WorldVisAtt);
+  logicMagnetOut->SetVisAttributes(WorldVisAtt);
+  logicMagnetShield->SetVisAttributes(WorldVisAtt);
+  logicMagnetIn ->SetVisAttributes(WorldVisAtt);
+  logicMagnetWinding->SetVisAttributes(green);
+  logicMagnetCover->SetVisAttributes(WorldVisAtt);
+  logicTrap->SetVisAttributes(WorldVisAtt);
+  logicInner->SetVisAttributes(WorldVisAtt);
+  logicSci->SetVisAttributes(WorldVisAtt);
+  logicOVC->SetVisAttributes(WorldVisAtt);
+  logicShield->SetVisAttributes(WorldVisAtt);
+  logicWall->SetVisAttributes(WorldVisAtt);
+  logicDeg1->SetVisAttributes(red);
+  logicDeg2->SetVisAttributes(red);
+
   
   // //--------- example of User Limits -------------------------------
   // 
