@@ -156,9 +156,9 @@ DetectorConstruction::DetectorConstruction():
 
 //------- 2021 Size ---------
 //  PMT Size
-  fSciX=1.7*mm;
-  fSciY=200.*mm;
-  fSciZ=72.*mm;
+  fSciX=10*mm;
+  fSciY=195.*mm;
+  fSciZ=68.*mm;
   NofSci=4;
 //---------------------------
  
@@ -213,16 +213,17 @@ DetectorConstruction::DetectorConstruction():
 //-------------------------
 
   //----- 2021 position -----
-  //  PMT Pos
+  //  Interconnect Pos
     leftPadPosX=   98.32365*mm;
     leftPadPosY=  0*cm;
   //  leftPadPosZ=  -(0.5*MagnetOutL+MagnetCover)-32.*cm;
     leftPadPosZ=    82.4256*mm;
-    
-    rightPadPosX= -30*cm;
-    rightPadPosY=   0.0*cm;
-  //  rightPadPosZ= -(0.5*MagnetOutL+MagnetCover)-30.*cm;
-    rightPadPosZ=   0*cm;
+
+  // Use this to move the pads closer and further away.
+    double offset = 0;
+    offset = -15*mm;
+    leftPadPosX+=offset;
+    leftPadPosZ+=offset;
 //-------------------------
 
 
@@ -418,12 +419,29 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   logicSci = new G4LogicalVolume(solidSci,SciMater,"logicScintillators");
   logicSci->SetSensitiveDetector( scintillators );
 
+  double yrotation, zrotation;
+  yrotation = M_PI/4;
+  zrotation = M_PI/360 * 15;
 
-  G4RotationMatrix * RotMat = new G4RotationMatrix();
-  RotMat->rotateY(45);
+  G4RotationMatrix * RotMat1 = new G4RotationMatrix(); //Back left
+  RotMat1->rotateY(yrotation);
+  //RotMat->rotateX(15);
+  RotMat1->rotateZ(-zrotation);
 
-  G4RotationMatrix * RotMat1 = new G4RotationMatrix();
-  RotMat1->rotateY(-45);
+  G4RotationMatrix * RotMat2 = new G4RotationMatrix(); //Back right
+  RotMat2->rotateY(-yrotation);
+    //RotMat1->rotateX(-15);
+  RotMat2->rotateZ(zrotation);
+  
+  G4RotationMatrix * RotMat3 = new G4RotationMatrix(); //Front left
+  RotMat3->rotateY(-yrotation);
+  //RotMat->rotateX(15);
+  RotMat3->rotateZ(-zrotation);
+
+  G4RotationMatrix * RotMat4 = new G4RotationMatrix(); //Front right
+  RotMat4->rotateY(yrotation);
+    //RotMat1->rotateX(-15);
+  RotMat4->rotateZ(zrotation);
 
   //  logicSci = new G4LogicalVolume(solidSci,SciMater,"Sci",0,scintillators);
     
@@ -432,30 +450,36 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //   physiSci = new G4PVPlacement(0,G4ThreeVector(-20.*cm,0.,0.),logicSci,"Sci",logicWorld,false,2);
   //   physiSci = new G4PVPlacement(0,G4ThreeVector(-20.*cm-fSciX,0.,0.),logicSci,"Sci",logicWorld,false,3);
    
-  // LEFT PAD by looking from AD -- Laser Hut Side
-  physiSci[0] = new G4PVPlacement(RotMat,G4ThreeVector(leftPadPosX,leftPadPosY,leftPadPosZ),logicSci,
+  // Back LEFT PAD -- Laser Hut Side - Downstream
+  //This is currently not in place due to electronics.
+  /*
+  physiSci[0] = new G4PVPlacement(RotMat1,G4ThreeVector(leftPadPosX,leftPadPosY,leftPadPosZ),logicSci,
 				  "ScintillatorsLeft",logicWorld,false,0,checkOverlaps);
   G4cout<<physiSci[0]->GetName()<<" Position (x,y,z): ("
 	<<physiSci[0]->GetTranslation().x()/cm<<", "
 	<<physiSci[0]->GetTranslation().y()/cm<<", "
 	<<physiSci[0]->GetTranslation().z()/cm<<") cm"<<G4endl;
-  // RIGHT PAD -- ASACUSA side
-  physiSci[1] = new G4PVPlacement(RotMat1,G4ThreeVector(-leftPadPosX,rightPadPosY,leftPadPosZ),logicSci,
+  */
+
+  // Back RIGHT PAD -- Laser Hut Side - Downstream
+  physiSci[1] = new G4PVPlacement(RotMat2,G4ThreeVector(-leftPadPosX,rightPadPosY,leftPadPosZ),logicSci,
 				  "ScintillatorsRight",logicWorld,false,1,checkOverlaps);
   G4cout<<physiSci[1]->GetName()<<" Position (x,y,z): ("
 	<<physiSci[1]->GetTranslation().x()/cm<<", "
 	<<physiSci[1]->GetTranslation().y()/cm<<", "
 	<<physiSci[1]->GetTranslation().z()/cm<<") cm"<<G4endl;
-    // LEFT PAD right by looking from AD -- Laser Hut Side
-  physiSci[2] = new G4PVPlacement(RotMat1,G4ThreeVector(leftPadPosX,leftPadPosY,-leftPadPosZ),logicSci,
-				  "ScintillatorsLeft1",logicWorld,false,0,checkOverlaps);
+
+    // Front LEFT PAD -- Laser Hut Side - Upstream
+  physiSci[2] = new G4PVPlacement(RotMat3,G4ThreeVector(leftPadPosX,leftPadPosY,-leftPadPosZ),logicSci,
+				  "ScintillatorsLeft1",logicWorld,false,2,checkOverlaps);
   G4cout<<physiSci[2]->GetName()<<" Position (x,y,z): ("
 	<<physiSci[2]->GetTranslation().x()/cm<<", "
 	<<physiSci[2]->GetTranslation().y()/cm<<", "
 	<<physiSci[2]->GetTranslation().z()/cm<<") cm"<<G4endl;
-  // RIGHT PAD left -- ASACUSA side
-  physiSci[3] = new G4PVPlacement(RotMat,G4ThreeVector(-leftPadPosX,rightPadPosY,-leftPadPosZ),logicSci,
-				  "ScintillatorsRight1",logicWorld,false,1,checkOverlaps);
+
+  // FRONT RIGHT PAD -- ASACUSA side - Upstream
+  physiSci[3] = new G4PVPlacement(RotMat4,G4ThreeVector(-leftPadPosX,rightPadPosY,-leftPadPosZ),logicSci,
+				  "ScintillatorsRight1",logicWorld,false,3,checkOverlaps);
   G4cout<<physiSci[3]->GetName()<<" Position (x,y,z): ("
 	<<physiSci[3]->GetTranslation().x()/cm<<", "
 	<<physiSci[3]->GetTranslation().y()/cm<<", "
